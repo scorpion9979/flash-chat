@@ -23,7 +23,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
       vsync: this,
     );
     animation = ColorTween(
-      begin: Colors.lightBlueAccent,
+      begin: Colors.black87,
       end: Colors.white,
     ).animate(controller);
 
@@ -58,7 +58,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                   ),
                 ),
                 TypewriterAnimatedTextKit(
-                  speed: Duration(milliseconds: 100),
+                  speed: Duration(milliseconds: 200),
                   onNext: () => controller.stop(),
                   text: ['Flash Chat'],
                   textStyle: TextStyle(
