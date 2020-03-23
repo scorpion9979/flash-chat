@@ -69,10 +69,12 @@ class _ChatScreenState extends State<ChatScreen> {
                   );
                 }
                 final List<DocumentSnapshot> messages = snapshot.data.documents;
-                return Column(
-                  children: messages
-                      .map((m) => Text('${m['text']} from ${m['sender']}'))
-                      .toList(),
+                return Expanded(
+                  child: ListView(
+                    children: messages
+                        .map((m) => Text('${m['text']} from ${m['sender']}'))
+                        .toList(),
+                  ),
                 );
               },
             ),
