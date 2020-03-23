@@ -13,7 +13,7 @@ class _ChatScreenState extends State<ChatScreen> {
   final _auth = FirebaseAuth.instance;
   final _firestore = Firestore.instance;
   FirebaseUser user;
-  String message;
+  String messageText;
 
   @override
   void initState() {
@@ -59,8 +59,23 @@ class _ChatScreenState extends State<ChatScreen> {
       body: SafeArea(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
+            StreamBuilder(
+              stream: _firestore.collection('messages').snapshots(),
+              builder: (context, snapshot) {
+                if (!snapshot.hasData) {
+                  return CircularProgressIndicator(
+                    backgroundColor: Colors.lightBlueAccent,
+                  );
+                }
+                final List<DocumentSnapshot> messages = snapshot.data.documents;
+                return Column(
+                  children: messages
+                      .map((m) => Text('${m['text']} from ${m['sender']}'))
+                      .toList(),
+                );
+              },
+            ),
             Container(
               decoration: kMessageContainerDecoration,
               child: Row(
@@ -69,7 +84,7 @@ class _ChatScreenState extends State<ChatScreen> {
                   Expanded(
                     child: TextField(
                       onChanged: (value) {
-                        message = value;
+                        messageText = value;
                       },
                       decoration: kMessageTextFieldDecoration,
                     ),
@@ -77,7 +92,7 @@ class _ChatScreenState extends State<ChatScreen> {
                   FlatButton(
                     onPressed: () {
                       _firestore.collection('messages').add({
-                        'text': message,
+                        'text': messageText,
                         'sender': user.email,
                       });
                     },
