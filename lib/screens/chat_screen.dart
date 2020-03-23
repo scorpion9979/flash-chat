@@ -71,9 +71,12 @@ class _ChatScreenState extends State<ChatScreen> {
                 final List<DocumentSnapshot> messages = snapshot.data.documents;
                 return Expanded(
                   child: ListView(
-                    children: messages
-                        .map((m) => Text('${m['text']} from ${m['sender']}'))
-                        .toList(),
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 10,
+                      vertical: 15,
+                    ),
+                    children:
+                        messages.map((m) => MessageBubble(message: m)).toList(),
                   ),
                 );
               },
@@ -108,6 +111,49 @@ class _ChatScreenState extends State<ChatScreen> {
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class MessageBubble extends StatelessWidget {
+  final message;
+  MessageBubble({this.message});
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.all(10),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          Padding(
+            padding: EdgeInsets.only(bottom: 5),
+            child: Text(
+              '${message['sender']}',
+              style: TextStyle(
+                fontSize: 12,
+                color: Colors.black54,
+              ),
+            ),
+          ),
+          Material(
+            color: Colors.lightBlueAccent,
+            borderRadius: BorderRadius.circular(5),
+            child: Padding(
+              padding: EdgeInsets.symmetric(
+                horizontal: 10,
+                vertical: 10,
+              ),
+              child: Text(
+                '${message['text']}',
+                style: TextStyle(
+                  fontSize: 15,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
